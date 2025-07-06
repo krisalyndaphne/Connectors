@@ -246,7 +246,8 @@ class ExportAgent:
         """
         
         for week in curriculum.weekly_content:
-            html_content += f"""
+            # Build week content
+            week_html = f"""
         <div class="week-content">
             <div class="week-header">
                 Week {week.week_number}: {week.topic}
@@ -257,18 +258,55 @@ class ExportAgent:
                 <h4>Expected Outcomes:</h4>
                 <ul>
                     {"".join(f"<li>{outcome}</li>" for outcome in week.expected_outcomes)}
-                </ul>
+                </ul>"""
+            
+            # Add videos section
+            if week.videos:
+                video_items = "".join(f'<li><a href="{video["url"]}" target="_blank">{video["title"]}</a> - {video.get("channel", "Unknown")}</li>' for video in week.videos)
+                week_html += f"""
                 
-                {f'<h4>📺 Videos:</h4><ul class="resource-list">{"".join(f"<li><a href=\\"{video["url"]}\\" target=\\"_blank\\">{video["title"]}</a> - {video.get("channel", "Unknown")}</li>" for video in week.videos)}</ul>' if week.videos else ""}
+                <h4>📺 Videos:</h4>
+                <ul class="resource-list">
+                    {video_items}
+                </ul>"""
+            
+            # Add documentation section
+            if week.documentation:
+                doc_items = "".join(f'<li><a href="{doc["url"]}" target="_blank">{doc["title"]}</a> - {doc.get("source", "Unknown")}</li>' for doc in week.documentation)
+                week_html += f"""
                 
-                {f'<h4>📚 Documentation:</h4><ul class="resource-list">{"".join(f"<li><a href=\\"{doc["url"]}\\" target=\\"_blank\\">{doc["title"]}</a> - {doc.get("source", "Unknown")}</li>" for doc in week.documentation)}</ul>' if week.documentation else ""}
+                <h4>📚 Documentation:</h4>
+                <ul class="resource-list">
+                    {doc_items}
+                </ul>"""
+            
+            # Add project section
+            if week.hands_on_project:
+                week_html += f"""
                 
-                {f'<div class="project-box"><h4>🔨 Hands-On Project: {week.hands_on_project.get("title", "Project")}</h4><p>{week.hands_on_project.get("description", "No description")}</p><p><strong>Estimated Time:</strong> {week.hands_on_project.get("estimated_time", "N/A")}</p></div>' if week.hands_on_project else ""}
+                <div class="project-box">
+                    <h4>🔨 Hands-On Project: {week.hands_on_project.get("title", "Project")}</h4>
+                    <p>{week.hands_on_project.get("description", "No description")}</p>
+                    <p><strong>Estimated Time:</strong> {week.hands_on_project.get("estimated_time", "N/A")}</p>
+                </div>"""
+            
+            # Add quiz section
+            if week.quiz_questions:
+                quiz_items = "".join(f'<li>{question.get("question", "Question not available")}</li>' for question in week.quiz_questions)
+                week_html += f"""
                 
-                {f'<div class="quiz-box"><h4>❓ Quiz Questions:</h4><ol>{"".join(f"<li>{question.get("question", "Question not available")}</li>" for question in week.quiz_questions)}</ol></div>' if week.quiz_questions else ""}
+                <div class="quiz-box">
+                    <h4>❓ Quiz Questions:</h4>
+                    <ol>
+                        {quiz_items}
+                    </ol>
+                </div>"""
+            
+            week_html += """
             </div>
-        </div>
-            """
+        </div>"""
+            
+            html_content += week_html
         
         html_content += """
     </div>

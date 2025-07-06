@@ -259,19 +259,42 @@ const todoList = new TodoList();
         }
     
     def _generate_mini_project(self, topic: str, skill_level: str) -> Dict[str, Any]:
-        """Generate a mini project"""
+        """Generate a mini project based on the specific topic"""
         topic_clean = topic.replace(' Fundamentals', '').replace(' Basics', '').strip()
+        topic_lower = topic_clean.lower()
         
-        project_ideas = {
-            'python': ['Weather App', 'Password Generator', 'File Organizer', 'Quiz Game'],
-            'javascript': ['Memory Game', 'Color Picker', 'Unit Converter', 'Digital Clock'],
-            'web': ['Portfolio Site', 'Landing Page', 'Photo Gallery', 'Contact Form'],
-            'generic': ['Data Processor', 'Simple Calculator', 'Text Analyzer', 'Basic Game']
-        }
+        # Generate topic-specific project ideas
+        if 'python' in topic_lower:
+            if 'web' in topic_lower or 'django' in topic_lower or 'flask' in topic_lower:
+                project_ideas = ['Blog Platform', 'Task Manager API', 'Recipe Sharing Site', 'Weather Dashboard']
+            elif 'data' in topic_lower or 'analysis' in topic_lower:
+                project_ideas = ['Sales Data Analyzer', 'Stock Price Tracker', 'Survey Results Dashboard', 'Social Media Analytics']
+            else:
+                project_ideas = ['Personal Finance Tracker', 'File Organizer', 'Contact Manager', 'Quiz Application']
+        elif 'javascript' in topic_lower:
+            if 'react' in topic_lower:
+                project_ideas = ['Todo App with React', 'Movie Search App', 'Recipe Finder', 'Weather Widget']
+            elif 'node' in topic_lower:
+                project_ideas = ['REST API Server', 'Chat Application', 'File Upload Service', 'User Authentication System']
+            else:
+                project_ideas = ['Interactive Dashboard', 'Memory Game', 'Calculator App', 'Image Gallery']
+        elif 'web development' in topic_lower:
+            project_ideas = ['Responsive Portfolio', 'Business Landing Page', 'E-commerce Product Page', 'Online Resume']
+        elif 'java' in topic_lower:
+            project_ideas = ['Library Management System', 'Banking Application', 'Student Grade Calculator', 'Inventory Tracker']
+        elif 'data science' in topic_lower or 'machine learning' in topic_lower:
+            project_ideas = ['Predictive Model', 'Data Visualization Dashboard', 'Customer Segmentation', 'Recommendation System']
+        else:
+            # Generic projects based on skill level
+            if skill_level == 'beginner':
+                project_ideas = ['Simple Calculator', 'To-Do List', 'Basic Game', 'Data Processor']
+            elif skill_level == 'intermediate':
+                project_ideas = ['Web Application', 'API Service', 'Data Dashboard', 'Mobile App']
+            else:
+                project_ideas = ['Microservice Architecture', 'ML Pipeline', 'Full-Stack Platform', 'Distributed System']
         
-        # Select appropriate project ideas
-        ideas = project_ideas.get(topic_clean.lower(), project_ideas['generic'])
-        project_title = random.choice(ideas)
+        # Select a project idea
+        project_title = random.choice(project_ideas)
         
         return {
             'type': 'mini_project',
