@@ -1,28 +1,30 @@
-GitHub Manager Agent
-====================
+# GitHub Manager Agent
 
 A lightweight Python helper class that wraps common GitHub repository management operations (list, clone, create, delete, push, describe). It combines GitHub's REST API v3 (via the `requests` library) with local `git` CLI calls (via `subprocess`).
 
-## Features
-✅ List all repositories under a GitHub user or organization
-📁 Clone repositories to local disk
-📝 Create a new repository
-🗑️ Delete a repository
-🔄 Push local code changes to a specified repository
-🔍 Display repo details (description, stars, forks, language, etc.)
+## 🎯 Features
 
-## Requirements
-- Python 3.8+
-- Git CLI installed and accessible in PATH
-- GitHub Personal Access Token (for authenticated operations)
+- ✅ **List** all repositories under a GitHub user or organization
+- 📁 **Clone** repositories to local disk
+- 📝 **Create** a new repository
+- 🗑️ **Delete** a repository (with confirmation)
+- 🔄 **Push** local code changes to a specified repository
+- 🔍 **Display** repo details (description, stars, forks, language, etc.)
 
-## Installation
-1. Install dependencies:
+## 📋 Requirements
+
+- **Python 3.8+**
+- **Git CLI** installed and accessible in PATH
+- **GitHub Personal Access Token** (for authenticated operations)
+
+## 🚀 Installation
+
+1. **Install dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. Set your GitHub Personal Access Token:
+2. **Set your GitHub Personal Access Token:**
    ```bash
    # Linux/Mac
    export GITHUB_TOKEN=your_token_here
@@ -31,9 +33,10 @@ A lightweight Python helper class that wraps common GitHub repository management
    $env:GITHUB_TOKEN = "your_token_here"
    ```
 
-## Usage
+## 💻 Usage
 
 ### Command Line Interface
+
 ```bash
 # List repositories for a user/organization
 python github_manager_agent.py list octocat
@@ -55,6 +58,7 @@ python github_manager_agent.py details owner/repo
 ```
 
 ### Python API
+
 ```python
 from github_manager_agent import GitHubManagerAgent
 
@@ -77,14 +81,34 @@ repo = agent.create_repository("my-new-repo", private=False)
 print(f"Created: {repo['html_url']}")
 ```
 
-## Authentication
-Most operations require a GitHub Personal Access Token with appropriate scopes:
+## 🔐 Authentication
+
+Most operations require a **GitHub Personal Access Token** with appropriate scopes:
+
 - `public_repo` scope for public repositories
-- `repo` scope for private repositories
+- `repo` scope for private repositories  
 - `delete_repo` scope for repository deletion
 
-Create a token at: https://github.com/settings/tokens
+**Create a token at:** `https://github.com/settings/tokens`
 
-## Error Handling
+## ⚠️ Error Handling
+
 The agent raises `GitHubAPIError` for API-related issues and `RuntimeError` for git command failures. All destructive operations (like delete) require explicit confirmation.
+
+## 📖 API Reference
+
+### GitHubManagerAgent Methods
+
+| Method | Description | Parameters |
+|--------|-------------|------------|
+| `list_repositories(user_or_org)` | List all repos for user/org | `user_or_org`: GitHub username or org name |
+| `clone_repository(repo_url, destination)` | Clone repo to local disk | `repo_url`: GitHub repo URL, `destination`: local path |
+| `create_repository(name, private, org)` | Create new repository | `name`: repo name, `private`: bool, `org`: org name (optional) |
+| `delete_repository(full_name, confirm)` | Delete repository | `full_name`: owner/repo, `confirm`: must be True |
+| `push_changes(local_path, commit_message)` | Push local changes | `local_path`: git repo path, `commit_message`: commit msg |
+| `get_repo_details(full_name)` | Get repository metadata | `full_name`: owner/repo format |
+
+---
+
+**Made with ❤️ for GitHub automation**
 
